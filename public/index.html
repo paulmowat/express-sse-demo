@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>SSE Test</title>
+</head>
+
+<body>
+  <h3>Message</h3>
+  <ul id="data">
+  </ul>
+
+  <h3>Event</h3>
+  <ul id="eventdata">
+  </ul>
+  
+  <script type="text/javascript">
+    var data = new EventSource("/stream")
+    data.onmessage = function (e) {
+      const data = JSON.parse(e.data)
+      const ul = document.getElementById("data");
+      var li = document.createElement("li");
+      li.appendChild(document.createTextNode(data.time + ' - ' + data.message));
+      ul.appendChild(li);
+      console.log('send message received', e)
+    }
+
+    data.addEventListener('send', function (e) {
+      const data = JSON.parse(e.data)
+      const ul = document.getElementById("eventdata");
+      var li = document.createElement("li");
+      li.appendChild(document.createTextNode(data.time + ' - ' + data.message));
+      ul.appendChild(li);
+      console.log('send event received', e)
+    })
+
+
+  </script>
+</body>
+
+</html>
